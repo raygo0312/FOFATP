@@ -1,0 +1,8 @@
+[package]
+name = "rust_atp"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tptp = { version = "0.31.1", features = ["serde"] }
+good_lp = { version = "1.14", features = ["coin_cbc"] }

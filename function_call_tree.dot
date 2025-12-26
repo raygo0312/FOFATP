@@ -1,0 +1,130 @@
+digraph function_call_tree { // fof_logic_formulaまで完璧に実装
+  formula_selection [shape = box;];
+  tfx_annotated [shape = box;];
+  cnf_annotated [shape = box;];
+  annotations [shape = box;];
+  integer [shape = box;];
+  fof_defined_plain_formula [shape = box;];
+  defined_infix_pred [shape = box;];
+  fof_system_atomic_formula [shape = box;];
+  fof_defined_term [shape = box;];
+  fof_system_term [shape = box;];
+
+  lower_word [shape = component;];
+  upper_word [shape = component;];
+  single_quoted [shape = component;];
+  fof_quantifier [shape = component;];
+  unary_connective [shape = component;];
+  infix_inequality [shape = component;];
+  nonassoc_connective [shape = component;];
+
+  include [shape = diamond;];
+  fof_annotated [shape = diamond;];
+  fof_binary_nonassoc [shape = diamond;];
+  fof_quantified_formula [shape = diamond;];
+  fof_variable_list [shape = diamond;];
+  fof_plain_term [shape = diamond;];
+  fof_arguments [shape = diamond;];
+  fof_unary_formula [shape = diamond;];
+  fof_infix_unary [shape = diamond;];
+  fof_or_formula [shape = diamond;];
+  fof_and_formula [shape = diamond;];
+
+  tptp_input -> annotated_formula [label = "Annotated";];
+  tptp_input -> include [label = "Include";];
+
+  include -> file_name [label = "FileName";];
+  include -> formula_selection [label = "FormulaSelection";];
+
+  file_name -> single_quoted;
+
+  annotated_formula -> tfx_annotated [label = "Tfx";];
+  annotated_formula -> fof_annotated [label = "Fof";];
+  annotated_formula -> cnf_annotated [label = "Cnf";];
+
+  fof_annotated -> name [label = "Name";];
+  fof_annotated -> formula_role [label = "role";];
+  fof_annotated -> fof_formula [label = "formula";];
+  fof_annotated -> annotations [label = "annotations";];
+
+  name -> atomic_word [label = "AtomicWord";];
+  name -> integer [label = "Integer";];
+
+  atomic_word -> lower_word [label = "Lower";];
+  atomic_word -> single_quoted [label = "SingleQuoted";];
+
+  formula_role -> lower_word;
+
+  fof_formula -> fof_logic_formula;
+
+  fof_logic_formula -> fof_binary_formula [label = "Binary";];
+  fof_logic_formula -> fof_unary_formula [label = "Unary";];
+  fof_logic_formula -> fof_unitary_formula [label = "Unitary";];
+
+  fof_binary_formula -> fof_binary_nonassoc [label = "Nonassoc";];
+  fof_binary_formula -> fof_binary_assoc [label = "Assoc";];
+
+  fof_binary_nonassoc -> fof_unit_formula [label = "left";];
+  fof_binary_nonassoc -> nonassoc_connective [label = "op";];
+  fof_binary_nonassoc -> fof_unit_formula [label = "right";];
+
+  fof_unit_formula -> fof_unitary_formula [label = "Unitary";];
+  fof_unit_formula -> fof_unary_formula [label = "Unary";];
+
+  fof_unitary_formula -> fof_quantified_formula [label = "Quantified";];
+  fof_unitary_formula -> fof_atomic_formula [label = "Atomic";];
+  fof_unitary_formula -> fof_logic_formula [label = "Parenthesised";];
+
+  fof_quantified_formula -> fof_quantifier [label = "quantifier";];
+  fof_quantified_formula -> fof_variable_list [label = "bound";];
+  fof_quantified_formula -> fof_unit_formula [label = "formula";];
+
+  fof_variable_list -> variable [label = "variable";];
+
+  variable -> upper_word;
+
+  fof_atomic_formula -> fof_plain_atomic_formula [label = "Plain"];
+  fof_atomic_formula -> fof_defined_atomic_formula [label = "Defined"];
+  fof_atomic_formula -> fof_system_atomic_formula [label = "System"];
+
+  fof_plain_atomic_formula -> fof_plain_term [label = "term"];
+
+  fof_defined_atomic_formula -> fof_defined_plain_formula [label = "Plain"];
+  fof_defined_atomic_formula -> fof_defined_infix_formula [label = "Infix"];
+
+  fof_defined_infix_formula -> fof_term [label = "left"];
+  fof_defined_infix_formula -> defined_infix_pred [label = "op"];
+  fof_defined_infix_formula -> fof_term [label = "right"];
+
+  fof_plain_term -> constant [label = "Constant"];
+  fof_plain_term -> functor [label = "Function"];
+  fof_plain_term -> fof_arguments [label = "Function"];
+
+  constant -> functor;
+
+  functor -> atomic_word;
+
+  fof_arguments -> fof_term [label = "fof_term"];
+
+  fof_term -> fof_function_term [label = "Function"];
+  fof_term -> variable [label = "Variable"];
+
+  fof_function_term -> fof_plain_term [label = "Plain"];
+  fof_function_term -> fof_defined_term [label = "Defined"];
+  fof_function_term -> fof_system_term [label = "System"];
+
+  fof_unary_formula -> unary_connective [label = "Unary"];
+  fof_unary_formula -> fof_unit_formula [label = "Unary"];
+  fof_unary_formula -> fof_infix_unary [label = "InfixUnary"];
+
+  fof_infix_unary -> fof_term [label = "left"];
+  fof_infix_unary -> infix_inequality [label = "op"];
+  fof_infix_unary -> fof_term [label = "right"];
+
+  fof_binary_assoc -> fof_or_formula [label = "Or"];
+  fof_binary_assoc -> fof_and_formula [label = "And"];
+
+  fof_or_formula -> fof_unit_formula [label = "fof_unit_formula"];
+
+  fof_and_formula -> fof_unit_formula [label = "fof_unit_formula"];
+}
